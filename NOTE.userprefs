@@ -1,0 +1,26 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="NOTE\NoteEditor.cs">
+    <Files>
+      <File FileName="NOTE\Main.cs" Line="13" Column="6" />
+      <File FileName="NOTE\Note.cs" Line="14" Column="57" />
+      <File FileName="NOTE\NotesModel.cs" Line="37" Column="22" />
+      <File FileName="NOTE\AssemblyInfo.cs" Line="8" Column="40" />
+      <File FileName="NOTE\CustomEventArgs.cs" Line="13" Column="51" />
+      <File FileName="NOTE\INote.cs" Line="8" Column="27" />
+      <File FileName="NOTE\MainWindow.cs" Line="57" Column="1" />
+      <File FileName="NOTE\NoteEditor.cs" Line="18" Column="26" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State expanded="True" selected="True">
+          <Node name="NOTE" expanded="True" />
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>

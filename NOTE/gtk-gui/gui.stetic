@@ -48,6 +48,12 @@
         <property name="Label" translatable="yes">Add Note</property>
         <property name="ShortLabel" translatable="yes">Add Note</property>
       </action>
+      <action id="DeleteNoteAction1">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">Delete Note</property>
+        <property name="ShortLabel" translatable="yes">Delete Note</property>
+        <signal name="Activated" handler="OnDeleteNoteAction1Activated" />
+      </action>
     </action-group>
     <property name="MemberName" />
     <property name="Title" translatable="yes">MainWindow</property>
@@ -88,6 +94,7 @@
                     <property name="ShowArrow">False</property>
                     <node name="__gtksharp_108_Stetic_Editor_ActionToolbar" type="Toolbar">
                       <node type="Toolitem" action="AddNoteAction1" />
+                      <node type="Toolitem" action="DeleteNoteAction1" />
                     </node>
                   </widget>
                   <packing>
@@ -152,6 +159,8 @@
                             <property name="MemberName" />
                             <property name="CanFocus">True</property>
                             <property name="ShowScrollbars">True</property>
+                            <signal name="CursorChanged" handler="OnTreeviewNotesCursorChanged" />
+                            <signal name="KeyPressEvent" handler="OnTreeviewNotesKeyPressEvent" />
                           </widget>
                         </child>
                       </widget>
@@ -214,6 +223,7 @@
             <property name="MemberName" />
             <property name="CanFocus">True</property>
             <property name="IsEditable">True</property>
+            <property name="InvisibleChar">●</property>
             <signal name="KeyPressEvent" handler="OnEntryTitleKeyPressEvent" />
           </widget>
           <packing>
@@ -243,15 +253,40 @@
           </packing>
         </child>
         <child>
-          <widget class="Gtk.Button" id="buttonSave">
+          <widget class="Gtk.HBox" id="hbox1">
             <property name="MemberName" />
-            <property name="CanFocus">True</property>
-            <property name="Type">TextOnly</property>
-            <property name="Label" translatable="yes">Save</property>
-            <property name="UseUnderline">True</property>
-            <signal name="Released" handler="OnSave" />
-            <signal name="KeyPressEvent" handler="OnButton1KeyPressEvent" />
-            <signal name="Activated" handler="OnSave" />
+            <property name="Spacing">6</property>
+            <child>
+              <widget class="Gtk.Alignment" id="alignment1">
+                <property name="MemberName" />
+                <child>
+                  <placeholder />
+                </child>
+              </widget>
+              <packing>
+                <property name="Position">0</property>
+                <property name="AutoSize">True</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="Gtk.Button" id="buttonSave">
+                <property name="MemberName" />
+                <property name="WidthRequest">75</property>
+                <property name="CanFocus">True</property>
+                <property name="Type">TextOnly</property>
+                <property name="Label" translatable="yes">Save</property>
+                <property name="UseUnderline">True</property>
+                <signal name="Released" handler="OnSave" />
+                <signal name="KeyPressEvent" handler="OnButton1KeyPressEvent" />
+                <signal name="Activated" handler="OnSave" />
+              </widget>
+              <packing>
+                <property name="Position">1</property>
+                <property name="AutoSize">True</property>
+                <property name="Expand">False</property>
+                <property name="Fill">False</property>
+              </packing>
+            </child>
           </widget>
           <packing>
             <property name="Position">2</property>

@@ -20,9 +20,19 @@ namespace NOTE
 			set { textviewContent.Buffer.Text = value; }
 		}
 
+		public void Clear() {
+			entryTitle.Text = String.Empty;
+			textviewContent.Buffer.Text = String.Empty;
+		}
+
 		public NoteEditor ()
 		{
 			this.Build ();
+		}
+
+		public void LoadNote(INote n) {
+			Title = n.Title;
+			Content = n.Content;
 		}
 
 		protected void OnSave (object sender, EventArgs e)

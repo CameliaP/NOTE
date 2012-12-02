@@ -1,6 +1,8 @@
 using System;
 using Gtk;
 
+//TODO add two-step history to allow for revert of accidental deletions.
+
 namespace NOTE
 {
 	class MainClass

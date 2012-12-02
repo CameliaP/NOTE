@@ -9,6 +9,7 @@ namespace NOTE
 	/// <summary>
 	/// Holds a bunch of notes and provide convenience functions.
 	/// TODO make this implement the TreeModel interface?
+	/// TODO uncouple this class from ListStore?
 	/// </summary>
 	public class NotesModel
 	{
@@ -80,6 +81,16 @@ namespace NOTE
 
 		public void Remove(Note note) {
 			notesList.Remove(note);
+		}
+
+		//TODO allow reordering of ListStore (sort by date, etc)
+		public void Remove(Gtk.TreePath tp) {
+			int index = tp.Indices[0];
+			notesList.RemoveAt(index);
+			Gtk.TreeIter iter;
+			ListStore.GetIter(out iter, tp);
+			ListStore.Remove(ref iter);
+			SaveToFile(); //TODO save backup? as in... if overwrite existing file, then let's make backup.
 		}
 
 		private void AddToStore(Note note) {

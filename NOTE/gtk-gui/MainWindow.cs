@@ -11,6 +11,7 @@ public partial class MainWindow
 	private global::Gtk.Action SavAction;
 	private global::Gtk.Action SaveAction;
 	private global::Gtk.Action AddNoteAction1;
+	private global::Gtk.Action DeleteNoteAction1;
 	private global::Gtk.VBox vbox1;
 	private global::Gtk.MenuBar menubar1;
 	private global::Gtk.VBox vbox3;
@@ -53,6 +54,9 @@ public partial class MainWindow
 		this.AddNoteAction1 = new global::Gtk.Action ("AddNoteAction1", global::Mono.Unix.Catalog.GetString ("Add Note"), null, null);
 		this.AddNoteAction1.ShortLabel = global::Mono.Unix.Catalog.GetString ("Add Note");
 		w1.Add (this.AddNoteAction1, "<Control>n");
+		this.DeleteNoteAction1 = new global::Gtk.Action ("DeleteNoteAction1", global::Mono.Unix.Catalog.GetString ("Delete Note"), null, null);
+		this.DeleteNoteAction1.ShortLabel = global::Mono.Unix.Catalog.GetString ("Delete Note");
+		w1.Add (this.DeleteNoteAction1, null);
 		this.UIManager.InsertActionGroup (w1, 0);
 		this.AddAccelGroup (this.UIManager.AccelGroup);
 		this.Name = "MainWindow";
@@ -83,7 +87,8 @@ public partial class MainWindow
 		this.hbox1.Spacing = 6;
 		// Container child hbox1.Gtk.Box+BoxChild
 		this.UIManager.AddUiFromString ("<ui><toolbar name=\'toolbar2\'><toolitem name=\'AddNoteAction1\' action=\'AddNoteActio" +
-			"n1\'/></toolbar></ui>");
+			"n1\'/><toolitem name=\'DeleteNoteAction1\' action=\'DeleteNoteAction1\'/></toolbar></" +
+			"ui>");
 		this.toolbar2 = ((global::Gtk.Toolbar)(this.UIManager.GetWidget ("/toolbar2")));
 		this.toolbar2.Name = "toolbar2";
 		this.toolbar2.ShowArrow = false;
@@ -168,6 +173,9 @@ public partial class MainWindow
 		this.Show ();
 		this.DeleteEvent += new global::Gtk.DeleteEventHandler (this.OnDeleteEvent);
 		this.SaveAction.Activated += new global::System.EventHandler (this.OnSaveActionActivated);
+		this.DeleteNoteAction1.Activated += new global::System.EventHandler (this.OnDeleteNoteAction1Activated);
+		this.treeviewNotes.CursorChanged += new global::System.EventHandler (this.OnTreeviewNotesCursorChanged);
+		this.treeviewNotes.KeyPressEvent += new global::Gtk.KeyPressEventHandler (this.OnTreeviewNotesKeyPressEvent);
 		this.noteeditor1.SaveEvent += new global::System.EventHandler (this.OnNoteeditor1SaveEvent);
 		this.noteeditor1.OverallKeyPressEvent += new global::System.EventHandler (this.OnNoteeditor1OverallKeyPressEvent);
 	}

@@ -162,17 +162,17 @@ namespace NOTE
 	
 		private void AddTagToStore(string tag) {
 			if(tagCount[tag] == 1)
-				TagStore.AppendValues(tag);
+				TagStore.AppendValues(tag, 1);
 		}
 
 		private void AddTagToNewStore(string tag) {
-			TagStore.AppendValues(tag);
+			TagStore.AppendValues(tag, tagCount[tag]);
 		}
 
 		//TODO remove tags zeroed...
 		private Gtk.ListStore MakeTagStore() {
 			if(TagStore == null)
-				TagStore = new Gtk.ListStore(typeof(string));
+				TagStore = new Gtk.ListStore(typeof(string), typeof(int));
 			foreach(string tag in tagRecord.Keys) {
 				AddTagToNewStore(tag);
 			}

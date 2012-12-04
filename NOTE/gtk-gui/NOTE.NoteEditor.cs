@@ -75,25 +75,40 @@ namespace NOTE
 			this.buttonSave.CanFocus = true;
 			this.buttonSave.Name = "buttonSave";
 			this.buttonSave.UseUnderline = true;
-			this.buttonSave.Label = global::Mono.Unix.Catalog.GetString ("Save");
+			// Container child buttonSave.Gtk.Container+ContainerChild
+			global::Gtk.Alignment w6 = new global::Gtk.Alignment (0.5F, 0.5F, 0F, 0F);
+			// Container child GtkAlignment.Gtk.Container+ContainerChild
+			global::Gtk.HBox w7 = new global::Gtk.HBox ();
+			w7.Spacing = 2;
+			// Container child GtkHBox.Gtk.Container+ContainerChild
+			global::Gtk.Image w8 = new global::Gtk.Image ();
+			w8.Pixbuf = global::Stetic.IconLoader.LoadIcon (this, "gtk-save", global::Gtk.IconSize.Menu);
+			w7.Add (w8);
+			// Container child GtkHBox.Gtk.Container+ContainerChild
+			global::Gtk.Label w10 = new global::Gtk.Label ();
+			w10.LabelProp = global::Mono.Unix.Catalog.GetString ("Save");
+			w10.UseUnderline = true;
+			w7.Add (w10);
+			w6.Add (w7);
+			this.buttonSave.Add (w6);
 			this.hbox1.Add (this.buttonSave);
-			global::Gtk.Box.BoxChild w6 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.buttonSave]));
-			w6.Position = 1;
-			w6.Expand = false;
-			w6.Fill = false;
+			global::Gtk.Box.BoxChild w14 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.buttonSave]));
+			w14.Position = 1;
+			w14.Expand = false;
+			w14.Fill = false;
 			this.vbox4.Add (this.hbox1);
-			global::Gtk.Box.BoxChild w7 = ((global::Gtk.Box.BoxChild)(this.vbox4 [this.hbox1]));
-			w7.Position = 3;
-			w7.Expand = false;
-			w7.Fill = false;
+			global::Gtk.Box.BoxChild w15 = ((global::Gtk.Box.BoxChild)(this.vbox4 [this.hbox1]));
+			w15.Position = 3;
+			w15.Expand = false;
+			w15.Fill = false;
 			// Container child vbox4.Gtk.Box+BoxChild
 			this.hbuttonbox1 = new global::Gtk.HButtonBox ();
 			this.hbuttonbox1.Name = "hbuttonbox1";
 			this.vbox4.Add (this.hbuttonbox1);
-			global::Gtk.Box.BoxChild w8 = ((global::Gtk.Box.BoxChild)(this.vbox4 [this.hbuttonbox1]));
-			w8.Position = 4;
-			w8.Expand = false;
-			w8.Fill = false;
+			global::Gtk.Box.BoxChild w16 = ((global::Gtk.Box.BoxChild)(this.vbox4 [this.hbuttonbox1]));
+			w16.Position = 4;
+			w16.Expand = false;
+			w16.Fill = false;
 			this.Add (this.vbox4);
 			if ((this.Child != null)) {
 				this.Child.ShowAll ();

@@ -35,11 +35,19 @@ public partial class MainWindow: Gtk.Window
 		//Tags
 		TreeViewColumn tagsCol = new TreeViewColumn();
 		tagsCol.Title = "Tags";
+		TreeViewColumn tagsCountCol = new TreeViewColumn();
+		tagsCountCol.Title = "Count";
 		treeviewTags.AppendColumn(tagsCol);
+		treeviewTags.AppendColumn(tagsCountCol);
 		treeviewTags.Model = notes.TagStore;
+
 		CellRendererText tagTitleCell = new CellRendererText();
 		tagsCol.PackStart(tagTitleCell, true);
 		tagsCol.AddAttribute(tagTitleCell, "text", 0);
+
+		CellRendererText tagCountCell = new CellRendererText();
+		tagsCol.PackStart(tagCountCell, true);
+		tagsCol.AddAttribute(tagCountCell, "text", 1);
 	}
 	
 	protected void OnDeleteEvent (object sender, DeleteEventArgs a)

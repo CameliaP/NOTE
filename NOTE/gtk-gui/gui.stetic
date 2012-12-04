@@ -20,45 +20,22 @@
         <property name="Label" translatable="yes">Help</property>
         <property name="ShortLabel" translatable="yes">Help</property>
       </action>
-      <action id="AddNoteAction">
-        <property name="Type">Action</property>
-        <property name="Label" translatable="yes">Add Note</property>
-        <property name="ShortLabel" translatable="yes">Add Note</property>
-      </action>
-      <action id="DeleteNoteAction">
-        <property name="Type">Action</property>
-        <property name="Label" translatable="yes">Delete Note</property>
-        <property name="ShortLabel" translatable="yes">Delete Note</property>
-      </action>
-      <action id="SaveNoteAction2">
-        <property name="Type">Action</property>
-        <property name="Accelerator">&lt;Control&gt;s</property>
-        <property name="Label" translatable="yes">Save Note</property>
-        <property name="ShortLabel" translatable="yes">Save Note</property>
-        <signal name="Activated" handler="OnSaveNoteAction2Activated" />
-      </action>
-      <action id="AddNoteAction1">
-        <property name="Type">Action</property>
-        <property name="Label" translatable="yes">Add Note</property>
-        <property name="ShortLabel" translatable="yes">Add Note</property>
-      </action>
-      <action id="DeleteNoteAction1">
-        <property name="Type">Action</property>
-        <property name="Label" translatable="yes">Delete Note</property>
-        <property name="ShortLabel" translatable="yes">Delete Note</property>
-        <signal name="Activated" handler="OnDeleteNoteAction1Activated" />
-      </action>
-      <action id="DeleteNoteAction2">
-        <property name="Type">Action</property>
-        <property name="Label" translatable="yes">Delete Note</property>
-        <property name="ShortLabel" translatable="yes">Delete Note</property>
-      </action>
-      <action id="DeleteNoteAction3">
+      <action id="deleteAction">
         <property name="Type">Action</property>
         <property name="Accelerator">Delete</property>
         <property name="Label" translatable="yes">Delete Note</property>
         <property name="ShortLabel" translatable="yes">Delete Note</property>
+        <property name="StockId">gtk-delete</property>
         <signal name="Activated" handler="OnDeleteNoteAction1Activated" />
+      </action>
+      <action id="saveAction">
+        <property name="Type">Action</property>
+        <property name="Accelerator">&lt;Control&gt;s</property>
+        <property name="Label" translatable="yes">Save Note</property>
+        <property name="ShortLabel" translatable="yes">Save Note</property>
+        <property name="StockId">gtk-save</property>
+        <property name="Tooltip" translatable="yes">Ctrl+S</property>
+        <signal name="Activated" handler="OnSaveNoteAction2Activated" />
       </action>
     </action-group>
     <property name="MemberName" />
@@ -73,8 +50,8 @@
             <property name="MemberName" />
             <node name="menubar1" type="Menubar">
               <node type="Menu" action="FileAction">
-                <node type="Menuitem" action="SaveNoteAction2" />
-                <node type="Menuitem" action="DeleteNoteAction3" />
+                <node type="Menuitem" action="saveAction" />
+                <node type="Menuitem" action="deleteAction" />
               </node>
               <node type="Menu" action="HelpAction" />
             </node>
@@ -98,8 +75,10 @@
                 <child>
                   <widget class="Gtk.Toolbar" id="toolbar1">
                     <property name="MemberName" />
-                    <property name="ShowArrow">False</property>
-                    <node name="__gtksharp_77_Stetic_Editor_ActionToolbar" type="Toolbar" />
+                    <node name="__gtksharp_77_Stetic_Editor_ActionToolbar" type="Toolbar">
+                      <node type="Toolitem" action="saveAction" />
+                      <node type="Toolitem" action="deleteAction" />
+                    </node>
                   </widget>
                   <packing>
                     <property name="Position">0</property>
@@ -291,7 +270,8 @@
                 <property name="MemberName" />
                 <property name="WidthRequest">75</property>
                 <property name="CanFocus">True</property>
-                <property name="Type">TextOnly</property>
+                <property name="Type">TextAndIcon</property>
+                <property name="Icon">stock:gtk-save Menu</property>
                 <property name="Label" translatable="yes">Save</property>
                 <property name="UseUnderline">True</property>
                 <signal name="Released" handler="OnSave" />

@@ -6,13 +6,8 @@ public partial class MainWindow
 	private global::Gtk.UIManager UIManager;
 	private global::Gtk.Action FileAction;
 	private global::Gtk.Action HelpAction;
-	private global::Gtk.Action AddNoteAction;
-	private global::Gtk.Action DeleteNoteAction;
-	private global::Gtk.Action SaveNoteAction2;
-	private global::Gtk.Action AddNoteAction1;
-	private global::Gtk.Action DeleteNoteAction1;
-	private global::Gtk.Action DeleteNoteAction2;
-	private global::Gtk.Action DeleteNoteAction3;
+	private global::Gtk.Action deleteAction;
+	private global::Gtk.Action saveAction;
 	private global::Gtk.VBox vbox1;
 	private global::Gtk.MenuBar menubar1;
 	private global::Gtk.VBox vbox3;
@@ -40,27 +35,12 @@ public partial class MainWindow
 		this.HelpAction = new global::Gtk.Action ("HelpAction", global::Mono.Unix.Catalog.GetString ("Help"), null, null);
 		this.HelpAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Help");
 		w1.Add (this.HelpAction, null);
-		this.AddNoteAction = new global::Gtk.Action ("AddNoteAction", global::Mono.Unix.Catalog.GetString ("Add Note"), null, null);
-		this.AddNoteAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Add Note");
-		w1.Add (this.AddNoteAction, null);
-		this.DeleteNoteAction = new global::Gtk.Action ("DeleteNoteAction", global::Mono.Unix.Catalog.GetString ("Delete Note"), null, null);
-		this.DeleteNoteAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Delete Note");
-		w1.Add (this.DeleteNoteAction, null);
-		this.SaveNoteAction2 = new global::Gtk.Action ("SaveNoteAction2", global::Mono.Unix.Catalog.GetString ("Save Note"), null, null);
-		this.SaveNoteAction2.ShortLabel = global::Mono.Unix.Catalog.GetString ("Save Note");
-		w1.Add (this.SaveNoteAction2, "<Control>s");
-		this.AddNoteAction1 = new global::Gtk.Action ("AddNoteAction1", global::Mono.Unix.Catalog.GetString ("Add Note"), null, null);
-		this.AddNoteAction1.ShortLabel = global::Mono.Unix.Catalog.GetString ("Add Note");
-		w1.Add (this.AddNoteAction1, null);
-		this.DeleteNoteAction1 = new global::Gtk.Action ("DeleteNoteAction1", global::Mono.Unix.Catalog.GetString ("Delete Note"), null, null);
-		this.DeleteNoteAction1.ShortLabel = global::Mono.Unix.Catalog.GetString ("Delete Note");
-		w1.Add (this.DeleteNoteAction1, null);
-		this.DeleteNoteAction2 = new global::Gtk.Action ("DeleteNoteAction2", global::Mono.Unix.Catalog.GetString ("Delete Note"), null, null);
-		this.DeleteNoteAction2.ShortLabel = global::Mono.Unix.Catalog.GetString ("Delete Note");
-		w1.Add (this.DeleteNoteAction2, null);
-		this.DeleteNoteAction3 = new global::Gtk.Action ("DeleteNoteAction3", global::Mono.Unix.Catalog.GetString ("Delete Note"), null, null);
-		this.DeleteNoteAction3.ShortLabel = global::Mono.Unix.Catalog.GetString ("Delete Note");
-		w1.Add (this.DeleteNoteAction3, "Delete");
+		this.deleteAction = new global::Gtk.Action ("deleteAction", global::Mono.Unix.Catalog.GetString ("Delete Note"), null, "gtk-delete");
+		this.deleteAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Delete Note");
+		w1.Add (this.deleteAction, "Delete");
+		this.saveAction = new global::Gtk.Action ("saveAction", global::Mono.Unix.Catalog.GetString ("Save Note"), global::Mono.Unix.Catalog.GetString ("Ctrl+S"), "gtk-save");
+		this.saveAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Save Note");
+		w1.Add (this.saveAction, "<Control>s");
 		this.UIManager.InsertActionGroup (w1, 0);
 		this.AddAccelGroup (this.UIManager.AccelGroup);
 		this.Name = "MainWindow";
@@ -70,7 +50,10 @@ public partial class MainWindow
 		this.vbox1 = new global::Gtk.VBox ();
 		this.vbox1.Name = "vbox1";
 		// Container child vbox1.Gtk.Box+BoxChild
-		this.UIManager.AddUiFromString (@"<ui><menubar name='menubar1'><menu name='FileAction' action='FileAction'><menuitem name='SaveNoteAction2' action='SaveNoteAction2'/><menuitem name='DeleteNoteAction3' action='DeleteNoteAction3'/></menu><menu name='HelpAction' action='HelpAction'/></menubar></ui>");
+		this.UIManager.AddUiFromString ("<ui><menubar name=\'menubar1\'><menu name=\'FileAction\' action=\'FileAction\'><menuite" +
+			"m name=\'saveAction\' action=\'saveAction\'/><menuitem name=\'deleteAction\' action=\'d" +
+			"eleteAction\'/></menu><menu name=\'HelpAction\' action=\'HelpAction\'/></menubar></ui" +
+			">");
 		this.menubar1 = ((global::Gtk.MenuBar)(this.UIManager.GetWidget ("/menubar1")));
 		this.menubar1.Name = "menubar1";
 		this.vbox1.Add (this.menubar1);
@@ -88,10 +71,9 @@ public partial class MainWindow
 		this.hbox1.Name = "hbox1";
 		this.hbox1.Spacing = 6;
 		// Container child hbox1.Gtk.Box+BoxChild
-		this.UIManager.AddUiFromString ("<ui><toolbar name=\'toolbar1\'/></ui>");
+		this.UIManager.AddUiFromString ("<ui><toolbar name=\'toolbar1\'><toolitem name=\'saveAction\' action=\'saveAction\'/><to" +
+			"olitem name=\'deleteAction\' action=\'deleteAction\'/></toolbar></ui>");
 		this.toolbar1 = ((global::Gtk.Toolbar)(this.UIManager.GetWidget ("/toolbar1")));
-		this.toolbar1.Name = "toolbar1";
-		this.toolbar1.ShowArrow = false;
 		this.hbox1.Add (this.toolbar1);
 		global::Gtk.Box.BoxChild w3 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.toolbar1]));
 		w3.Position = 0;
@@ -172,9 +154,8 @@ public partial class MainWindow
 		this.DefaultHeight = 501;
 		this.Show ();
 		this.DeleteEvent += new global::Gtk.DeleteEventHandler (this.OnDeleteEvent);
-		this.SaveNoteAction2.Activated += new global::System.EventHandler (this.OnSaveNoteAction2Activated);
-		this.DeleteNoteAction1.Activated += new global::System.EventHandler (this.OnDeleteNoteAction1Activated);
-		this.DeleteNoteAction3.Activated += new global::System.EventHandler (this.OnDeleteNoteAction1Activated);
+		this.deleteAction.Activated += new global::System.EventHandler (this.OnDeleteNoteAction1Activated);
+		this.saveAction.Activated += new global::System.EventHandler (this.OnSaveNoteAction2Activated);
 		this.treeviewNotes.CursorChanged += new global::System.EventHandler (this.OnTreeviewNotesCursorChanged);
 		this.noteeditor1.SaveEvent += new global::System.EventHandler (this.OnNoteeditor1SaveEvent);
 		this.noteeditor1.OverallKeyPressEvent += new global::System.EventHandler (this.OnNoteeditor1OverallKeyPressEvent);

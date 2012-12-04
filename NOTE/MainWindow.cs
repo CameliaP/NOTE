@@ -28,7 +28,6 @@ public partial class MainWindow: Gtk.Window
 		*/
 		//TODO if multiple selected disable NoteEditor
 
-
 		//Event handler for notes
 		notes = new NotesModel();
 		treeviewNotes.Model = notes.ListStore;
@@ -37,8 +36,10 @@ public partial class MainWindow: Gtk.Window
 		TreeViewColumn tagsCol = new TreeViewColumn();
 		tagsCol.Title = "Tags";
 		treeviewTags.AppendColumn(tagsCol);
-		ListStore tagsStore = new ListStore(typeof (string));
-		treeviewTags.Model = tagsStore;
+		treeviewTags.Model = notes.TagStore;
+		CellRendererText tagTitleCell = new CellRendererText();
+		tagsCol.PackStart(tagTitleCell, true);
+		tagsCol.AddAttribute(tagTitleCell, "text", 0);
 	}
 	
 	protected void OnDeleteEvent (object sender, DeleteEventArgs a)
@@ -57,13 +58,8 @@ public partial class MainWindow: Gtk.Window
 
 	protected void OnNoteeditor1OverallKeyPressEvent (object sender, EventArgs e)
 	{
-		KeyPressEventArgs kpe = (KeyPressEventArgs) e;
-		Console.WriteLine (kpe.Event.KeyValue);
-	}
-
-	protected void OnSaveActionActivated (object sender, EventArgs e)
-	{
-		Console.WriteLine("Absolutely.");
+		//KeyPressEventArgs kpe = (KeyPressEventArgs) e;
+		//Console.WriteLine (kpe.Event.KeyValue);
 	}
 
 	protected void OnTreeviewNotesCursorChanged (object sender, EventArgs e)
@@ -72,10 +68,10 @@ public partial class MainWindow: Gtk.Window
 		int index = GetSelectedIndex(tv);
 		noteeditor1.LoadNote(notes[index]);
 	}
-	
 	protected void OnDeleteNoteAction1Activated (object sender, EventArgs e)
 	{
-		DeleteCurrentSelection();
+		if(treeviewNotes.HasFocus)
+			DeleteCurrentSelection();
 	}
 
 	private void DeleteCurrentSelection() {
@@ -105,11 +101,11 @@ public partial class MainWindow: Gtk.Window
 		return GetTreePath(tv).Indices[0];
 	}
 
-	protected void OnTreeviewNotesKeyPressEvent (object o, KeyPressEventArgs args)
+	protected void OnSaveNoteAction2Activated (object sender, EventArgs e)
 	{
-		if(args.Event.Key == Gdk.Key.Delete)
-			DeleteCurrentSelection();
+		this.OnNoteeditor1SaveEvent(noteeditor1, null);
 	}
-
 }
+
+
 

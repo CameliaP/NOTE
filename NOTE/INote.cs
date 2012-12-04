@@ -6,6 +6,7 @@ namespace NOTE
 	{
 		string Title {get;set;}
 		string Content {get;set;}
+		string[] Tags {get;set;} //TODO Convert this to HashSet next
 	}
 }
 

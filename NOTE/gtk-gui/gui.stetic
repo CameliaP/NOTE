@@ -30,26 +30,32 @@
         <property name="Label" translatable="yes">Delete Note</property>
         <property name="ShortLabel" translatable="yes">Delete Note</property>
       </action>
-      <action id="SavAction">
-        <property name="Type">Action</property>
-        <property name="Label" translatable="yes">Sav</property>
-        <property name="ShortLabel" translatable="yes">Sav</property>
-      </action>
-      <action id="SaveAction">
+      <action id="SaveNoteAction2">
         <property name="Type">Action</property>
         <property name="Accelerator">&lt;Control&gt;s</property>
-        <property name="Label" translatable="yes">Save</property>
-        <property name="ShortLabel" translatable="yes">Save</property>
-        <signal name="Activated" handler="OnSaveActionActivated" />
+        <property name="Label" translatable="yes">Save Note</property>
+        <property name="ShortLabel" translatable="yes">Save Note</property>
+        <signal name="Activated" handler="OnSaveNoteAction2Activated" />
       </action>
       <action id="AddNoteAction1">
         <property name="Type">Action</property>
-        <property name="Accelerator">&lt;Control&gt;n</property>
         <property name="Label" translatable="yes">Add Note</property>
         <property name="ShortLabel" translatable="yes">Add Note</property>
       </action>
       <action id="DeleteNoteAction1">
         <property name="Type">Action</property>
+        <property name="Label" translatable="yes">Delete Note</property>
+        <property name="ShortLabel" translatable="yes">Delete Note</property>
+        <signal name="Activated" handler="OnDeleteNoteAction1Activated" />
+      </action>
+      <action id="DeleteNoteAction2">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">Delete Note</property>
+        <property name="ShortLabel" translatable="yes">Delete Note</property>
+      </action>
+      <action id="DeleteNoteAction3">
+        <property name="Type">Action</property>
+        <property name="Accelerator">Delete</property>
         <property name="Label" translatable="yes">Delete Note</property>
         <property name="ShortLabel" translatable="yes">Delete Note</property>
         <signal name="Activated" handler="OnDeleteNoteAction1Activated" />
@@ -67,7 +73,8 @@
             <property name="MemberName" />
             <node name="menubar1" type="Menubar">
               <node type="Menu" action="FileAction">
-                <node type="Menuitem" action="SaveAction" />
+                <node type="Menuitem" action="SaveNoteAction2" />
+                <node type="Menuitem" action="DeleteNoteAction3" />
               </node>
               <node type="Menu" action="HelpAction" />
             </node>
@@ -89,13 +96,10 @@
                 <property name="MemberName" />
                 <property name="Spacing">6</property>
                 <child>
-                  <widget class="Gtk.Toolbar" id="toolbar2">
+                  <widget class="Gtk.Toolbar" id="toolbar1">
                     <property name="MemberName" />
                     <property name="ShowArrow">False</property>
-                    <node name="__gtksharp_108_Stetic_Editor_ActionToolbar" type="Toolbar">
-                      <node type="Toolitem" action="AddNoteAction1" />
-                      <node type="Toolitem" action="DeleteNoteAction1" />
-                    </node>
+                    <node name="__gtksharp_77_Stetic_Editor_ActionToolbar" type="Toolbar" />
                   </widget>
                   <packing>
                     <property name="Position">0</property>
@@ -160,7 +164,6 @@
                             <property name="CanFocus">True</property>
                             <property name="ShowScrollbars">True</property>
                             <signal name="CursorChanged" handler="OnTreeviewNotesCursorChanged" />
-                            <signal name="KeyPressEvent" handler="OnTreeviewNotesKeyPressEvent" />
                           </widget>
                         </child>
                       </widget>
@@ -242,6 +245,7 @@
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
                 <property name="ShowScrollbars">True</property>
+                <property name="AcceptsTab">False</property>
                 <property name="Text" translatable="yes" />
                 <signal name="KeyPressEvent" handler="OnTextviewContentKeyPressEvent" />
               </widget>
@@ -250,6 +254,20 @@
           <packing>
             <property name="Position">1</property>
             <property name="AutoSize">True</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="Gtk.Entry" id="entryTags">
+            <property name="MemberName" />
+            <property name="CanFocus">True</property>
+            <property name="IsEditable">True</property>
+            <property name="InvisibleChar">●</property>
+          </widget>
+          <packing>
+            <property name="Position">2</property>
+            <property name="AutoSize">True</property>
+            <property name="Expand">False</property>
+            <property name="Fill">False</property>
           </packing>
         </child>
         <child>
@@ -289,7 +307,7 @@
             </child>
           </widget>
           <packing>
-            <property name="Position">2</property>
+            <property name="Position">3</property>
             <property name="AutoSize">True</property>
             <property name="Expand">False</property>
             <property name="Fill">False</property>
@@ -301,7 +319,7 @@
             <property name="Size">0</property>
           </widget>
           <packing>
-            <property name="Position">3</property>
+            <property name="Position">4</property>
             <property name="AutoSize">True</property>
             <property name="Expand">False</property>
             <property name="Fill">False</property>

@@ -8,6 +8,7 @@ namespace NOTE
 		private global::Gtk.Entry entryTitle;
 		private global::Gtk.ScrolledWindow GtkScrolledWindow;
 		private global::Gtk.TextView textviewContent;
+		private global::Gtk.Entry entryTags;
 		private global::Gtk.HBox hbox1;
 		private global::Gtk.Alignment alignment1;
 		private global::Gtk.Button buttonSave;
@@ -42,10 +43,22 @@ namespace NOTE
 			this.textviewContent = new global::Gtk.TextView ();
 			this.textviewContent.CanFocus = true;
 			this.textviewContent.Name = "textviewContent";
+			this.textviewContent.AcceptsTab = false;
 			this.GtkScrolledWindow.Add (this.textviewContent);
 			this.vbox4.Add (this.GtkScrolledWindow);
 			global::Gtk.Box.BoxChild w3 = ((global::Gtk.Box.BoxChild)(this.vbox4 [this.GtkScrolledWindow]));
 			w3.Position = 1;
+			// Container child vbox4.Gtk.Box+BoxChild
+			this.entryTags = new global::Gtk.Entry ();
+			this.entryTags.CanFocus = true;
+			this.entryTags.Name = "entryTags";
+			this.entryTags.IsEditable = true;
+			this.entryTags.InvisibleChar = '●';
+			this.vbox4.Add (this.entryTags);
+			global::Gtk.Box.BoxChild w4 = ((global::Gtk.Box.BoxChild)(this.vbox4 [this.entryTags]));
+			w4.Position = 2;
+			w4.Expand = false;
+			w4.Fill = false;
 			// Container child vbox4.Gtk.Box+BoxChild
 			this.hbox1 = new global::Gtk.HBox ();
 			this.hbox1.Name = "hbox1";
@@ -54,8 +67,8 @@ namespace NOTE
 			this.alignment1 = new global::Gtk.Alignment (0.5F, 0.5F, 1F, 1F);
 			this.alignment1.Name = "alignment1";
 			this.hbox1.Add (this.alignment1);
-			global::Gtk.Box.BoxChild w4 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.alignment1]));
-			w4.Position = 0;
+			global::Gtk.Box.BoxChild w5 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.alignment1]));
+			w5.Position = 0;
 			// Container child hbox1.Gtk.Box+BoxChild
 			this.buttonSave = new global::Gtk.Button ();
 			this.buttonSave.WidthRequest = 75;
@@ -64,23 +77,23 @@ namespace NOTE
 			this.buttonSave.UseUnderline = true;
 			this.buttonSave.Label = global::Mono.Unix.Catalog.GetString ("Save");
 			this.hbox1.Add (this.buttonSave);
-			global::Gtk.Box.BoxChild w5 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.buttonSave]));
-			w5.Position = 1;
-			w5.Expand = false;
-			w5.Fill = false;
-			this.vbox4.Add (this.hbox1);
-			global::Gtk.Box.BoxChild w6 = ((global::Gtk.Box.BoxChild)(this.vbox4 [this.hbox1]));
-			w6.Position = 2;
+			global::Gtk.Box.BoxChild w6 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.buttonSave]));
+			w6.Position = 1;
 			w6.Expand = false;
 			w6.Fill = false;
+			this.vbox4.Add (this.hbox1);
+			global::Gtk.Box.BoxChild w7 = ((global::Gtk.Box.BoxChild)(this.vbox4 [this.hbox1]));
+			w7.Position = 3;
+			w7.Expand = false;
+			w7.Fill = false;
 			// Container child vbox4.Gtk.Box+BoxChild
 			this.hbuttonbox1 = new global::Gtk.HButtonBox ();
 			this.hbuttonbox1.Name = "hbuttonbox1";
 			this.vbox4.Add (this.hbuttonbox1);
-			global::Gtk.Box.BoxChild w7 = ((global::Gtk.Box.BoxChild)(this.vbox4 [this.hbuttonbox1]));
-			w7.Position = 3;
-			w7.Expand = false;
-			w7.Fill = false;
+			global::Gtk.Box.BoxChild w8 = ((global::Gtk.Box.BoxChild)(this.vbox4 [this.hbuttonbox1]));
+			w8.Position = 4;
+			w8.Expand = false;
+			w8.Fill = false;
 			this.Add (this.vbox4);
 			if ((this.Child != null)) {
 				this.Child.ShowAll ();

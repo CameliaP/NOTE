@@ -28,7 +28,6 @@ public partial class MainWindow: Gtk.Window
 		*/
 		//TODO if multiple selected disable NoteEditor
 
-		//Event handler for notes
 		notes = new NotesModel();
 		treeviewNotes.Model = notes.ListStore;
 
@@ -36,6 +35,7 @@ public partial class MainWindow: Gtk.Window
 		TreeViewColumn tagsCol = new TreeViewColumn();
 		tagsCol.Title = "Tags";
 		TreeViewColumn tagsCountCol = new TreeViewColumn();
+		tagsCountCol.SortIndicator = true;
 		tagsCountCol.Title = "Count";
 		treeviewTags.AppendColumn(tagsCol);
 		treeviewTags.AppendColumn(tagsCountCol);
@@ -72,9 +72,16 @@ public partial class MainWindow: Gtk.Window
 
 	protected void OnTreeviewNotesCursorChanged (object sender, EventArgs e)
 	{
-		TreeView tv = (TreeView) sender;
-		int index = GetSelectedIndex(tv);
-		noteeditor1.LoadNote(notes[index]);
+		TreeSelection selection = (sender as TreeView).Selection;
+		
+		TreeModel model;
+		TreeIter iter;
+		
+		// The iter will point to the selected row
+		if(selection.GetSelected(out model, out iter)) {
+			Note note = (Note) model.GetValue (iter, 1);
+			noteeditor1.LoadNote(note);
+		} 
 	}
 	protected void OnDeleteNoteAction1Activated (object sender, EventArgs e)
 	{

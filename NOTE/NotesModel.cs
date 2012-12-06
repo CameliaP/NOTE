@@ -148,7 +148,7 @@ namespace NOTE
 
 		private void AddToStore(Note note) {
 			//Title store
-			ListStore.AppendValues(note.Title);
+			AddNoteToStore(note);
 			//Tags store
 			//AddTagToStore
 			foreach(string tag in note.Tags) {
@@ -156,8 +156,8 @@ namespace NOTE
 			}
 		}
 
-		private void AddNoteTitleToStore(Note note) {
-			ListStore.AppendValues(note.Title);
+		private void AddNoteToStore(Note note) {
+			ListStore.AppendValues(note.Title, note);
 		}
 	
 		private void AddTagToStore(string tag) {
@@ -180,9 +180,9 @@ namespace NOTE
 		}
 
 		private Gtk.ListStore MakeListStore() {
-			ListStore = new Gtk.ListStore(typeof(string));
+			ListStore = new Gtk.ListStore(typeof(string), typeof(Note));
 			foreach(Note n in notesList) {
-				AddNoteTitleToStore(n);
+				AddNoteToStore(n);
 			}
 			return ListStore;
 		}

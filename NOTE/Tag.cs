@@ -8,7 +8,7 @@ namespace NOTE
 	{
 		public string Name {get;set;}
 		public int Count {get;set;}
-		public HashSet<Note> Notes {get;set;}
+		public ISet<Note> Notes {get;set;}
 		/// <summary>
 		/// For linking back to ListStore
 		/// </summary>

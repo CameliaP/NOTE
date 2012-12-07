@@ -17,7 +17,7 @@ namespace NOTE
 		public Gtk.ListStore TagStore {get;private set;}
 
 		protected ISet<Note> notes;
-		protected Dictionary<string, Tag> tagDict;
+		protected IDictionary<string, Tag> tagDict;
 
 		private string dataFile = "notes.dat"; //TODO allow flexible path
 		public string DataFile {get;set;}

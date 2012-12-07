@@ -25,8 +25,8 @@ namespace NOTE
 			//notes.Add(n);
 			//notes.SaveToFile();
 			notes.LoadFromFile();
-			Note loaded = notes[0];
-			Console.WriteLine (loaded.Title);
+			//Note loaded = notes.[0];
+			//Console.WriteLine (loaded.Title);
 		}
 	}
 }

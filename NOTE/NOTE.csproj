@@ -61,6 +61,7 @@
     <Compile Include="INote.cs" />
     <Compile Include="Tests\INoteTests.cs" />
     <Compile Include="INoteExtensions.cs" />
+    <Compile Include="Tag.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

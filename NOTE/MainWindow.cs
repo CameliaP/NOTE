@@ -46,8 +46,8 @@ public partial class MainWindow: Gtk.Window
 		tagsCol.AddAttribute(tagTitleCell, "text", 0);
 
 		CellRendererText tagCountCell = new CellRendererText();
-		tagsCol.PackStart(tagCountCell, true);
-		tagsCol.AddAttribute(tagCountCell, "text", 1);
+		tagsCountCol.PackStart(tagCountCell, true);
+		tagsCountCol.AddAttribute(tagCountCell, "text", 1);
 	}
 	
 	protected void OnDeleteEvent (object sender, DeleteEventArgs a)
@@ -79,7 +79,7 @@ public partial class MainWindow: Gtk.Window
 		
 		// The iter will point to the selected row
 		if(selection.GetSelected(out model, out iter)) {
-			Note note = (Note) model.GetValue (iter, 1);
+			Note note = model.GetValue (iter, 1) as Note;
 			noteeditor1.LoadNote(note);
 		} 
 	}
@@ -90,19 +90,19 @@ public partial class MainWindow: Gtk.Window
 	}
 
 	private void DeleteCurrentSelection() {
-		Gtk.TreePath treePath;
-		Gtk.TreeViewColumn treeColumn;
-		treeviewNotes.GetCursor(out treePath, out treeColumn);
+		TreeSelection selection = (treeviewNotes as TreeView).Selection;
+		
+		TreeModel model;
+		TreeIter iter;
+		
+		// The iter will point to the selected row
+		if(selection.GetSelected(out model, out iter)) {
+			Note note = model.GetValue (iter, 1) as Note;
+			notes.Remove(note);
+			noteeditor1.Clear();
+		} 
 
-		notes.Remove(treePath);
-		noteeditor1.Clear();
-		//TODO make this less hackish
-		if(treePath.Indices[0] < notes.Count)
-			treeviewNotes.SetCursor(treePath, treeColumn, false);
-		else if(treePath.Indices[0] == notes.Count){
-			treePath.Prev();
-			treeviewNotes.SetCursor(treePath, treeColumn, false);
-		}
+		// TODO: move cursor to next selection?
 	}
 
 	private Gtk.TreePath GetTreePath(TreeView tv) {

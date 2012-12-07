@@ -90,7 +90,7 @@ namespace NOTE
 		}
 		#endregion
 
-		#region Native stuff
+		#region Addition/Removal
 		public void Add(INote note) {
 			Note n = new Note(note);
 			Add(n);
@@ -152,9 +152,9 @@ namespace NOTE
 			//TODO buffering or something?
 			SaveToFile();
 		}
-		#endregion
 
-		#region Gtk stuff
+
+
 		private void AddToStore(Note note) {
 			//Title store
 			AddNoteToStore(note);
@@ -175,8 +175,9 @@ namespace NOTE
 				TagStore.SetValue(tag.TreeIter, (int)TagCols.Count, tag.Count);
 			}
 		}
+		#endregion
 
-		//TODO remove tags zeroed...
+		#region GtkStores
 		private Gtk.ListStore MakeTagStore() {
 			if(TagStore == null)
 				TagStore = new Gtk.ListStore(typeof(string), typeof(int));

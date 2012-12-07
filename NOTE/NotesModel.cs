@@ -17,15 +17,21 @@ namespace NOTE
 		public Gtk.ListStore TagStore {get;private set;}
 
 		protected HashSet<Note> notes;
-		//TODO Given a tag, we can just sync the TagStore with the HashTag!
-		protected Dictionary<string, HashSet<Note>> tagRecord;
-		protected Dictionary<string, int> tagCount;
+		protected Dictionary<string, Tag> tagDict;
 
 		private string dataFile = "notes.dat"; //TODO allow flexible path
 		public string DataFile {get;set;}
 
 		public int Count {
 			get { return notes.Count; }
+		}
+
+		public enum TagCols {
+			Name, Count
+		}
+
+		public enum NoteCols {
+			Title, NoteRef
 		}
 
 		#region Initialization
@@ -43,8 +49,7 @@ namespace NOTE
 
 		private void InitializeNew() {
 			notes = new HashSet<Note> ();
-			tagRecord = new Dictionary<string, HashSet<Note>> ();
-			tagCount = new Dictionary<string, int> ();
+			tagDict = new Dictionary<string, Tag> ();
 		}
 		#endregion
 
@@ -55,8 +60,7 @@ namespace NOTE
 				BinaryFormatter bf = new BinaryFormatter();
 				try {
 					bf.Serialize(s, notes);
-					bf.Serialize(s, tagRecord);
-					bf.Serialize(s, tagCount);
+					bf.Serialize(s, tagDict);
 					return true;
 				} catch(SerializationException) {
 					//TODO better error mechanism.
@@ -72,8 +76,7 @@ namespace NOTE
 				try {
 					//TODO: WE NEED TO HANDLE SERIALIZATION OF WRONG OBJECTS.
 					notes = bf.Deserialize(s) as HashSet<Note>; //check if object type is correct.
-					tagRecord = (Dictionary<string, HashSet<Note>>) bf.Deserialize(s);
-					tagCount = (Dictionary<string, int>) bf.Deserialize(s);
+					tagDict = (Dictionary<string, Tag>) bf.Deserialize(s);
 				} catch(SerializationException) {
 					//TODO better error mechanism.
 					throw;
@@ -104,30 +107,50 @@ namespace NOTE
 
 		public void AddToTagRecord(Note note) {
 			foreach(String tag in note.Tags) {
-				if(!tagRecord.ContainsKey(tag)) {
-					tagRecord[tag] = new HashSet<Note> ();
-				}
-				tagRecord[tag].Add(note);
-
-				if(!tagCount.ContainsKey(tag)) {
-					tagCount[tag] = 1;
+				if(!tagDict.ContainsKey(tag)) {
+					tagDict[tag] = new Tag(tag, 1, note);
 				} else {
-					tagCount[tag]++;
+					//implies that tag has already been created
+					tagDict[tag].Count++;
 				}
 			}
 		}
 
-		public void RemoveFromTagRecord (Note note)
+		/// <summary>
+		/// Make sure all references to obsolete Tag object is removed.
+		/// </summary>
+		/// <param name='tag'>
+		/// Tag.
+		/// </param>
+		private void DeleteTag (Tag tag) {
+			Gtk.TreeIter treeIter = tag.TreeIter;
+			TagStore.Remove(ref treeIter);
+			//tag.TreeIter = Gtk.TreeIter.Zero; //might not be necessary -- our only source to tag is tagDict
+			tagDict.Remove(tag.Name); //also damn important
+		}
+
+		private void RemoveTagsFrom (Note note)
 		{
-			foreach (String tag in note.Tags) {
-				tagRecord[tag].Remove (note);
-				tagCount[tag]--;
+			foreach (String tagStr in note.Tags) {
+				Tag tag = tagDict[tagStr];
+
+				if(tag.Count == 1) {
+					DeleteTag(tag);
+				} else {
+					TagStore.SetValue(tag.TreeIter, (int)TagCols.Count, --tag.Count);
+					tag.Notes.Remove (note);
+				}
 			}
 		}
 
 		public void Remove(Note note) {
 			notes.Remove(note);
-			RemoveFromTagRecord(note);
+			Gtk.TreeIter treeIter = note.TreeIter;
+			ListStore.Remove(ref treeIter);
+			RemoveTagsFrom(note);
+
+			//TODO buffering or something?
+			SaveToFile();
 		}
 		#endregion
 
@@ -136,31 +159,29 @@ namespace NOTE
 			//Title store
 			AddNoteToStore(note);
 			//Tags store
-			//AddTagToStore
 			foreach(string tag in note.Tags) {
-				AddTagToStore(tag);
+				AddTagToStore(tagDict[tag]);
 			}
 		}
 
 		private void AddNoteToStore(Note note) {
-			ListStore.AppendValues(note.Title, note);
-		}
-	
-		private void AddTagToStore(string tag) {
-			if(tagCount[tag] == 1)
-				TagStore.AppendValues(tag, 1);
+			note.TreeIter = ListStore.AppendValues(note.Title, note);
 		}
 
-		private void AddTagToNewStore(string tag) {
-			TagStore.AppendValues(tag, tagCount[tag]);
+		private void AddTagToStore(Tag tag) {
+			if(tag.TreeIter.Equals (Gtk.TreeIter.Zero)) {
+				tag.TreeIter = TagStore.AppendValues(tag.Name, tag.Count);
+			} else {
+				TagStore.SetValue(tag.TreeIter, (int)TagCols.Count, tag.Count);
+			}
 		}
 
 		//TODO remove tags zeroed...
 		private Gtk.ListStore MakeTagStore() {
 			if(TagStore == null)
 				TagStore = new Gtk.ListStore(typeof(string), typeof(int));
-			foreach(string tag in tagRecord.Keys) {
-				AddTagToNewStore(tag);
+			foreach(Tag tag in tagDict.Values) {
+				AddTagToStore(tag);
 			}
 			return TagStore;
 		}

@@ -97,7 +97,7 @@ public partial class MainWindow: Gtk.Window
 		
 		// The iter will point to the selected row
 		if(selection.GetSelected(out model, out iter)) {
-			Note note = model.GetValue (iter, 1) as Note;
+			Note note = model.GetValue (iter, (int)NotesModel.NoteCols.NoteRef) as Note;
 			notes.Remove(note);
 			noteeditor1.Clear();
 		} 

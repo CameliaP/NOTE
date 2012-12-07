@@ -9,6 +9,17 @@ namespace NOTE
 		public string Content {get;set;}
 		public string[] Tags {get;set;}
 
+		[NonSerialized]
+		private Gtk.TreeIter treeIter;
+		public Gtk.TreeIter TreeIter {
+			get {
+				return treeIter;
+			}
+			set {
+				treeIter = value;
+			}
+		}
+
 		public Note (INote note = null)
 		{
 			if (note != null) {

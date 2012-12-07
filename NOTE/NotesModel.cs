@@ -22,6 +22,7 @@ namespace NOTE
 		protected Dictionary<string, int> tagCount;
 
 		private string dataFile = "notes.dat"; //TODO allow flexible path
+		public string DataFile {get;set;}
 
 		public int Count {
 			get { return notesList.Count; }

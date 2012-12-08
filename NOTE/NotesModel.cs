@@ -212,9 +212,20 @@ namespace NOTE
 			return TagStore;
 		}
 
-		private Gtk.ListStore MakeListStore() {
+		public Gtk.ListStore MakeListStore (string tag)
+		{
+			return MakeListStore(tagDict[tag].Notes);
+		}
+
+		private Gtk.ListStore MakeListStore ()
+		{
+			return MakeListStore(this.notes);
+		}
+
+		private Gtk.ListStore MakeListStore(IEnumerable<Note> notes) {
 			ListStore = new Gtk.ListStore(typeof(string), typeof(Note));
 			foreach(Note n in notes) {
+				n.TreeIter = Gtk.TreeIter.Zero;
 				AddNoteToStore(n);
 			}
 			return ListStore;

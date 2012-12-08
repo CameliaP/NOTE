@@ -145,6 +145,7 @@
                             <property name="WidthRequest">50</property>
                             <property name="CanFocus">True</property>
                             <property name="ShowScrollbars">True</property>
+                            <signal name="CursorChanged" handler="OnTreeviewTagsCursorChanged" />
                           </widget>
                         </child>
                       </widget>

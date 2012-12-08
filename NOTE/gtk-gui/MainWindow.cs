@@ -261,6 +261,7 @@ public partial class MainWindow
 		this.deleteAction.Activated += new global::System.EventHandler (this.OnDeleteNoteAction1Activated);
 		this.saveAction.Activated += new global::System.EventHandler (this.OnSaveNoteAction2Activated);
 		this.newAction.Activated += new global::System.EventHandler (this.OnNewActionActivated);
+		this.treeviewTags.CursorChanged += new global::System.EventHandler (this.OnTreeviewTagsCursorChanged);
 		this.treeviewNotes.CursorChanged += new global::System.EventHandler (this.OnTreeviewNotesCursorChanged);
 		this.buttonSave.Released += new global::System.EventHandler (this.OnButtonSaveReleased);
 	}

@@ -83,7 +83,7 @@ public partial class MainWindow: Gtk.Window
 		if(selection.GetSelected(out model, out iter)) {
 			Note note = model.GetValue (iter, 1) as Note;
 			LoadNote(note);
-		} 
+		}
 	}
 	protected void OnDeleteNoteAction1Activated (object sender, EventArgs e)
 	{
@@ -154,6 +154,20 @@ public partial class MainWindow: Gtk.Window
 	protected void OnButtonSaveReleased (object sender, EventArgs e)
 	{
 		SaveNote();
+	}
+
+	protected void OnTreeviewTagsCursorChanged (object sender, EventArgs e)
+	{
+		TreeSelection selection = (sender as TreeView).Selection;
+		
+		TreeModel model;
+		TreeIter iter;
+		
+		// The iter will point to the selected row
+		if(selection.GetSelected(out model, out iter)) {
+			string tagName = model.GetValue (iter, (int)NotesModel.TagCols.Name) as string;
+			treeviewNotes.Model = notes.MakeListStore(tagName); //TODO: fix invalid treeIter
+		}
 	}
 }
 

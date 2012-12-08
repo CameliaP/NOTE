@@ -76,7 +76,7 @@
                   <widget class="Gtk.Toolbar" id="toolbar1">
                     <property name="MemberName" />
                     <property name="ShowArrow">False</property>
-                    <node name="toolbar1" type="Toolbar">
+                    <node name="__gtksharp_77_Stetic_Editor_ActionToolbar" type="Toolbar">
                       <node type="Toolitem" action="saveAction" />
                       <node type="Toolitem" action="deleteAction" />
                     </node>

@@ -58,10 +58,21 @@ public partial class MainWindow: Gtk.Window
 
 	protected void OnNoteeditor1SaveEvent (object sender, EventArgs e)
 	{
-		if(!(sender is NoteEditor)) return;
+		if (!(sender is NoteEditor))
+			return;
 
-		NoteEditor editor = (NoteEditor) sender;
-		notes.Add(editor);
+		NoteEditor editor = (NoteEditor)sender;
+
+		TreeSelection selection = (treeviewNotes as TreeView).Selection;
+		TreeModel model;
+		TreeIter iter;
+
+		if (selection.CountSelectedRows() == 1 && selection.GetSelected (out model, out iter)) {
+			Note oldNote = model.GetValue(iter, (int)NotesModel.NoteCols.NoteRef) as Note;
+			notes.Update(oldNote, editor);
+		} else {
+			notes.Add (editor);
+		}
 	}
 
 	protected void OnNoteeditor1OverallKeyPressEvent (object sender, EventArgs e)

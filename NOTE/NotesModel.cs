@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization;
 using System.IO;
+using System.Linq;
 
 namespace NOTE
 {
@@ -91,6 +92,27 @@ namespace NOTE
 		#endregion
 
 		#region Addition/Removal
+		public void Update(Note note, INote newNote) {
+			note.Title = newNote.Title;
+			ListStore.SetValue(note.TreeIter, (int)NoteCols.Title, note.Title);
+
+			note.Content = newNote.Content;
+
+			//TODO: optimize this later.
+			HashSet<string> intersectTags = new HashSet<string> (
+					note.Tags.Intersect(newNote.Tags)
+				);
+
+			IEnumerable<string> obsoleteTags = note.Tags.Except(intersectTags);
+			IEnumerable<string> newTags = newNote.Tags.Except(intersectTags);
+
+			RemoveTagsFrom(note, obsoleteTags);
+			AddTagsFrom(note, newTags);
+
+			note.Tags = newNote.Tags;
+			SaveToFile();
+		}
+
 		public void Add(INote note) {
 			Note n = new Note(note);
 			Add(n);
@@ -98,21 +120,26 @@ namespace NOTE
 
 		public void Add(Note note) {
 			notes.Add(note);
-			//NOTE order is important here.
-			AddToTagRecord(note);
-			AddToStore(note);
+			AddNoteToStore(note);
+			AddTagsFrom(note);
 			//TODO buffering or something?
 			SaveToFile();
 		}
 
-		public void AddToTagRecord(Note note) {
-			foreach(String tag in note.Tags) {
+		private void AddTagsFrom(Note note) {
+			AddTagsFrom(note, note.Tags);
+		}
+
+		private void AddTagsFrom(Note note, IEnumerable<string> tags) {
+			foreach(String tag in tags) {
 				if(!tagDict.ContainsKey(tag)) {
 					tagDict[tag] = new Tag(tag, 1, note);
 				} else {
 					//implies that tag has already been created
 					tagDict[tag].Count++;
+					tagDict[tag].Notes.Add(note);
 				}
+				AddTagToStore(tagDict[tag]);
 			}
 		}
 
@@ -129,9 +156,13 @@ namespace NOTE
 			tagDict.Remove(tag.Name); //also damn important
 		}
 
-		private void RemoveTagsFrom (Note note)
+		private void RemoveTagsFrom (Note note) {
+			RemoveTagsFrom(note, note.Tags);
+		}
+
+		private void RemoveTagsFrom (Note note, IEnumerable<string> tags)
 		{
-			foreach (String tagStr in note.Tags) {
+			foreach (String tagStr in tags) {
 				Tag tag = tagDict[tagStr];
 
 				if(tag.Count == 1) {
@@ -152,20 +183,14 @@ namespace NOTE
 			//TODO buffering or something?
 			SaveToFile();
 		}
-
-
-
-		private void AddToStore(Note note) {
-			//Title store
-			AddNoteToStore(note);
-			//Tags store
-			foreach(string tag in note.Tags) {
-				AddTagToStore(tagDict[tag]);
+		
+		private void AddNoteToStore (Note note)
+		{
+			if (note.TreeIter.Equals (Gtk.TreeIter.Zero)) {
+				note.TreeIter = ListStore.AppendValues (note.Title, note);
+			} else {
+				ListStore.SetValue(note.TreeIter, (int)NoteCols.Title, note.Title);
 			}
-		}
-
-		private void AddNoteToStore(Note note) {
-			note.TreeIter = ListStore.AppendValues(note.Title, note);
 		}
 
 		private void AddTagToStore(Tag tag) {

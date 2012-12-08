@@ -19,6 +19,8 @@ namespace NOTE
 			global::Stetic.Gui.Initialize (this);
 			// Widget NOTE.NoteEditor
 			global::Stetic.BinContainer.Attach (this);
+			this.CanDefault = true;
+			this.CanFocus = true;
 			this.Name = "NOTE.NoteEditor";
 			// Container child NOTE.NoteEditor.Gtk.Container+ContainerChild
 			this.vbox4 = new global::Gtk.VBox ();
@@ -26,9 +28,11 @@ namespace NOTE
 			this.vbox4.Spacing = 6;
 			// Container child vbox4.Gtk.Box+BoxChild
 			this.entryTitle = new global::Gtk.Entry ();
+			this.entryTitle.CanDefault = true;
 			this.entryTitle.CanFocus = true;
 			this.entryTitle.Name = "entryTitle";
 			this.entryTitle.IsEditable = true;
+			this.entryTitle.ActivatesDefault = true;
 			this.entryTitle.InvisibleChar = '●';
 			this.vbox4.Add (this.entryTitle);
 			global::Gtk.Box.BoxChild w1 = ((global::Gtk.Box.BoxChild)(this.vbox4 [this.entryTitle]));
@@ -114,11 +118,6 @@ namespace NOTE
 				this.Child.ShowAll ();
 			}
 			this.Hide ();
-			this.entryTitle.KeyPressEvent += new global::Gtk.KeyPressEventHandler (this.OnEntryTitleKeyPressEvent);
-			this.textviewContent.KeyPressEvent += new global::Gtk.KeyPressEventHandler (this.OnTextviewContentKeyPressEvent);
-			this.buttonSave.Released += new global::System.EventHandler (this.OnSave);
-			this.buttonSave.KeyPressEvent += new global::Gtk.KeyPressEventHandler (this.OnButton1KeyPressEvent);
-			this.buttonSave.Activated += new global::System.EventHandler (this.OnSave);
 		}
 	}
 }

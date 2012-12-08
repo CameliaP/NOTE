@@ -56,12 +56,9 @@ public partial class MainWindow: Gtk.Window
 		a.RetVal = true;
 	}
 
-	protected void OnNoteeditor1SaveEvent (object sender, EventArgs e)
+	protected void SaveNote ()
 	{
-		if (!(sender is NoteEditor))
-			return;
-
-		NoteEditor editor = (NoteEditor)sender;
+		Note newNote = MakeNote();
 
 		TreeSelection selection = (treeviewNotes as TreeView).Selection;
 		TreeModel model;
@@ -69,16 +66,10 @@ public partial class MainWindow: Gtk.Window
 
 		if (selection.CountSelectedRows() == 1 && selection.GetSelected (out model, out iter)) {
 			Note oldNote = model.GetValue(iter, (int)NotesModel.NoteCols.NoteRef) as Note;
-			notes.Update(oldNote, editor);
+			notes.Update(oldNote, newNote);
 		} else {
-			notes.Add (editor);
+			notes.Add (newNote);
 		}
-	}
-
-	protected void OnNoteeditor1OverallKeyPressEvent (object sender, EventArgs e)
-	{
-		//KeyPressEventArgs kpe = (KeyPressEventArgs) e;
-		//Console.WriteLine (kpe.Event.KeyValue);
 	}
 
 	protected void OnTreeviewNotesCursorChanged (object sender, EventArgs e)
@@ -91,7 +82,7 @@ public partial class MainWindow: Gtk.Window
 		// The iter will point to the selected row
 		if(selection.GetSelected(out model, out iter)) {
 			Note note = model.GetValue (iter, 1) as Note;
-			noteeditor1.LoadNote(note);
+			LoadNote(note);
 		} 
 	}
 	protected void OnDeleteNoteAction1Activated (object sender, EventArgs e)
@@ -110,7 +101,7 @@ public partial class MainWindow: Gtk.Window
 		if(selection.GetSelected(out model, out iter)) {
 			Note note = model.GetValue (iter, (int)NotesModel.NoteCols.NoteRef) as Note;
 			notes.Remove(note);
-			noteeditor1.Clear();
+			ClearEditor();
 		} 
 
 		// TODO: move cursor to next selection?
@@ -129,7 +120,40 @@ public partial class MainWindow: Gtk.Window
 
 	protected void OnSaveNoteAction2Activated (object sender, EventArgs e)
 	{
-		this.OnNoteeditor1SaveEvent(noteeditor1, null);
+		SaveNote();
+	}
+	protected void OnNewActionActivated (object sender, EventArgs e)
+	{
+		TreeSelection selection = (treeviewNotes as TreeView).Selection;
+		selection.UnselectAll();
+
+		ClearEditor();
+		entryTitle.GrabFocus();
+	}
+
+	public void ClearEditor() {
+		entryTitle.Text = String.Empty;
+		textviewContent.Buffer.Text = String.Empty;
+		entryTags.Text = String.Empty;
+	}
+
+	public Note MakeNote() {
+		Note note = new Note();
+		note.Title = entryTitle.Text;
+		note.Content = textviewContent.Buffer.Text;
+		note.Tags = INoteExtensions.TagArrayFromTagString(entryTags.Text);
+		return note;
+	}
+
+	public void LoadNote(INote n) {
+		entryTitle.Text = n.Title;
+		textviewContent.Buffer.Text = n.Content;
+		entryTags.Text = INoteExtensions.TagStringFromArray(n.Tags);
+	}
+
+	protected void OnButtonSaveReleased (object sender, EventArgs e)
+	{
+		SaveNote();
 	}
 }
 

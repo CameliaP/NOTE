@@ -53,7 +53,6 @@
     <Compile Include="gtk-gui\MainWindow.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="NoteEditor.cs" />
     <Compile Include="gtk-gui\NOTE.NoteEditor.cs" />
     <Compile Include="Note.cs" />
     <Compile Include="NotesModel.cs" />

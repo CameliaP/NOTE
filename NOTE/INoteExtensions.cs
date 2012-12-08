@@ -20,7 +20,7 @@ namespace NOTE
 		}
 
 		public static ISet<string> TagArrayFromTagString(string tags) {
-			return new HashSet<string> (tags.ToLower().Split (TagSeparator.ToCharArray()));
+			return new HashSet<string> (tags.ToLower().Split (TagSeparator.ToCharArray(), StringSplitOptions.RemoveEmptyEntries));
 		}
 	}
 }

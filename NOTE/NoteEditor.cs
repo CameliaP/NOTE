@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 //TODO Make a common interface for NOTES!
 
@@ -19,8 +20,10 @@ namespace NOTE
 			get { return textviewContent.Buffer.Text; }
 			set { textviewContent.Buffer.Text = value; }
 		}
-		public string[] Tags {
-			get { return INoteExtensions.TagArrayFromTagString(entryTags.Text); }
+		public ISet<string> Tags {
+			get { 
+				return INoteExtensions.TagArrayFromTagString(entryTags.Text);
+			}
 			set {
 				entryTags.Text = INoteExtensions.TagStringFromArray(value);
 			}

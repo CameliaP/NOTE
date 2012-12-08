@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace NOTE
 {
@@ -7,7 +8,7 @@ namespace NOTE
 	{
 		public string Title {get;set;}
 		public string Content {get;set;}
-		public string[] Tags {get;set;}
+		public ISet<string> Tags {get;set;}
 
 		[NonSerialized]
 		private Gtk.TreeIter treeIter;

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace NOTE
 {
@@ -10,7 +11,7 @@ namespace NOTE
 			return TagStringFromArray(note.Tags);
 		}
 
-		public static string TagStringFromArray(string[] tags) {
+		public static string TagStringFromArray(ISet<string> tags) {
 			return string.Join (TagSeparator, tags);
 		}
 
@@ -18,8 +19,8 @@ namespace NOTE
 			note.Tags = TagArrayFromTagString(tags);
 		}
 
-		public static string[] TagArrayFromTagString(string tags) {
-			return tags.ToLower().Split (TagSeparator.ToCharArray());
+		public static ISet<string> TagArrayFromTagString(string tags) {
+			return new HashSet<string> (tags.ToLower().Split (TagSeparator.ToCharArray()));
 		}
 	}
 }

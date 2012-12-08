@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace NOTE
 {
@@ -6,7 +7,7 @@ namespace NOTE
 	{
 		string Title {get;set;}
 		string Content {get;set;}
-		string[] Tags {get;set;} //TODO Convert this to HashSet next
+		ISet<string> Tags {get;set;}
 	}
 }
 

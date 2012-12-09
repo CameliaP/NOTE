@@ -4,6 +4,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization;
 using System.IO;
 using System.Linq;
+using System.Diagnostics;
 
 namespace NOTE
 {
@@ -72,7 +73,7 @@ namespace NOTE
 
 		public bool LoadFromFile ()
 		{
-			using(Stream s = new FileStream(dataFile, FileMode.Open)) {
+			using(Stream s = File.OpenRead (dataFile)) {
 				BinaryFormatter bf = new BinaryFormatter();
 				try {
 					//TODO: WE NEED TO HANDLE SERIALIZATION OF WRONG OBJECTS.
@@ -188,6 +189,7 @@ namespace NOTE
 		{
 			if (note.TreeIter.Equals (Gtk.TreeIter.Zero)) {
 				note.TreeIter = ListStore.AppendValues (note.Title, note);
+				Debug.Assert(!note.TreeIter.Equals(Gtk.TreeIter.Zero));
 			} else {
 				ListStore.SetValue(note.TreeIter, (int)NoteCols.Title, note.Title);
 			}
@@ -196,6 +198,7 @@ namespace NOTE
 		private void AddTagToStore(Tag tag) {
 			if(tag.TreeIter.Equals (Gtk.TreeIter.Zero)) {
 				tag.TreeIter = TagStore.AppendValues(tag.Name, tag.Count);
+				Debug.Assert(!tag.TreeIter.Equals(Gtk.TreeIter.Zero));
 			} else {
 				TagStore.SetValue(tag.TreeIter, (int)TagCols.Count, tag.Count);
 			}

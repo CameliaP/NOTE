@@ -7,7 +7,7 @@ namespace NOTE
 	public class Tag
 	{
 		public string Name {get;set;}
-		public int Count {get;set;}
+		public int Count {get {return Notes.Count;}}
 		public ISet<Note> Notes {get;set;}
 		/// <summary>
 		/// For linking back to ListStore
@@ -23,10 +23,9 @@ namespace NOTE
 			}
 		}
 
-		public Tag (string name, int count, Note note)
+		public Tag (string name, Note note)
 		{
 			Name = name;
-			Count = count;
 			Notes = new HashSet<Note> ();
 			Notes.Add(note);
 		}

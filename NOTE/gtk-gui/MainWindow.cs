@@ -15,7 +15,7 @@ public partial class MainWindow
 	private global::Gtk.VBox vbox3;
 	private global::Gtk.HBox hbox1;
 	private global::Gtk.Toolbar toolbar1;
-	private global::Gtk.ComboBoxEntry comboboxentry1;
+	private global::Gtk.ComboBoxEntry searchBox;
 	private global::Gtk.HPaned hpaned1;
 	private global::Gtk.HPaned hpaned2;
 	private global::Gtk.ScrolledWindow GtkScrolledWindow;
@@ -95,10 +95,10 @@ public partial class MainWindow
 		global::Gtk.Box.BoxChild w3 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.toolbar1]));
 		w3.Position = 0;
 		// Container child hbox1.Gtk.Box+BoxChild
-		this.comboboxentry1 = global::Gtk.ComboBoxEntry.NewText ();
-		this.comboboxentry1.Name = "comboboxentry1";
-		this.hbox1.Add (this.comboboxentry1);
-		global::Gtk.Box.BoxChild w4 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.comboboxentry1]));
+		this.searchBox = global::Gtk.ComboBoxEntry.NewText ();
+		this.searchBox.Name = "searchBox";
+		this.hbox1.Add (this.searchBox);
+		global::Gtk.Box.BoxChild w4 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.searchBox]));
 		w4.Position = 1;
 		w4.Expand = false;
 		w4.Fill = false;
@@ -261,6 +261,7 @@ public partial class MainWindow
 		this.deleteAction.Activated += new global::System.EventHandler (this.OnDeleteNoteAction1Activated);
 		this.saveAction.Activated += new global::System.EventHandler (this.OnSaveNoteAction2Activated);
 		this.newAction.Activated += new global::System.EventHandler (this.OnNewActionActivated);
+		this.searchBox.Changed += new global::System.EventHandler (this.OnSearchBoxChanged);
 		this.treeviewTags.CursorChanged += new global::System.EventHandler (this.OnTreeviewTagsCursorChanged);
 		this.treeviewNotes.CursorChanged += new global::System.EventHandler (this.OnTreeviewNotesCursorChanged);
 		this.buttonSave.Released += new global::System.EventHandler (this.OnButtonSaveReleased);

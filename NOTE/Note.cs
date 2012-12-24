@@ -29,6 +29,12 @@ namespace NOTE
 				Tags = note.Tags;
 			}
 		}
+
+		public bool Contains (String term) {
+			if (Title.Contains(term) && Content.Contains(term))
+				return true;
+			return false;
+		}
 	}
 }
 

@@ -29,7 +29,7 @@ public partial class MainWindow: Gtk.Window
 		//TODO if multiple selected disable NoteEditor
 
 		notes = new NotesModel();
-		treeviewNotes.Model = notes.ListStore;
+		treeviewNotes.Model = notes.NotesStore;
 
 		//Tags
 		TreeViewColumn tagsCol = new TreeViewColumn();
@@ -166,8 +166,17 @@ public partial class MainWindow: Gtk.Window
 		// The iter will point to the selected row
 		if(selection.GetSelected(out model, out iter)) {
 			string tagName = model.GetValue (iter, (int)NotesModel.TagCols.Name) as string;
-			treeviewNotes.Model = notes.MakeListStore(tagName); //TODO: fix invalid treeIter
+			treeviewNotes.Model = notes.MakeNotesStore(tagName); //TODO: fix invalid treeIter
 		}
+	}
+
+	protected void OnSearchBoxChanged (object sender, EventArgs e)
+	{
+		Gtk.ListStore notesStore, tagStore;
+		notes.InSearchMode = true;
+		notes.MakeSearchStore(searchBox.ActiveText, out notesStore, out tagStore);
+		treeviewNotes.Model = notesStore;
+		treeviewTags.Model = tagStore;
 	}
 }
 

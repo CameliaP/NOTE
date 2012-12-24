@@ -105,10 +105,11 @@
                   </packing>
                 </child>
                 <child>
-                  <widget class="Gtk.ComboBoxEntry" id="comboboxentry1">
+                  <widget class="Gtk.ComboBoxEntry" id="searchBox">
                     <property name="MemberName" />
                     <property name="IsTextCombo">True</property>
                     <property name="Items" translatable="yes" />
+                    <signal name="Changed" handler="OnSearchBoxChanged" />
                   </widget>
                   <packing>
                     <property name="Position">1</property>

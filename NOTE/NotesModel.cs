@@ -15,11 +15,26 @@ namespace NOTE
 	/// </summary>
 	public class NotesModel
 	{
-		public Gtk.ListStore ListStore {get;private set;}
+		public Gtk.ListStore NotesStore {get;private set;}
 		public Gtk.ListStore TagStore {get;private set;}
 
-		protected ISet<Note> notes;
-		protected IDictionary<string, Tag> tagDict;
+		private ISet<Note> notes;
+		private IDictionary<string, Tag> tagDict;
+		private IDictionary<string, Tag> searchTagDict;
+		private IDictionary<string, Tag> TagDict {
+			get {
+				return InSearchMode ? searchTagDict : tagDict;
+			}
+			set {
+				if(InSearchMode) {
+					searchTagDict = value;
+				} else {
+					tagDict = value;
+				}
+			}
+		}
+
+		public bool InSearchMode {get;set;}
 
 		private string dataFile = "notes.dat"; //TODO allow flexible path
 		public string DataFile {get;set;}
@@ -45,8 +60,9 @@ namespace NOTE
 			} else {
 				LoadFromFile();
 			}
-			MakeTagStore();
-			MakeListStore();
+			TagStore = MakeTagStore();
+			NotesStore = MakeNotesStore();
+			InSearchMode = false;
 		}
 
 		private void InitializeNew() {
@@ -95,7 +111,7 @@ namespace NOTE
 		#region Addition/Removal
 		public void Update(Note note, INote newNote) {
 			note.Title = newNote.Title;
-			ListStore.SetValue(note.TreeIter, (int)NoteCols.Title, note.Title);
+			NotesStore.SetValue(note.TreeIter, (int)NoteCols.Title, note.Title);
 
 			note.Content = newNote.Content;
 
@@ -132,15 +148,23 @@ namespace NOTE
 		}
 
 		private void AddTagsFrom(Note note, IEnumerable<string> tags) {
+			AddTagsFrom(note, tags, tagDict);
+		}
+
+		private void AddTagsFrom(Note note, IEnumerable<string> tags, IDictionary<String,Tag> tagDict) {
+			AddTagsFrom(note, tags, tagDict, TagStore);
+		}
+
+		private void AddTagsFrom(Note note, IEnumerable<string> tags, IDictionary<String,Tag> tagDict,
+		                         Gtk.ListStore tagStore) {
 			foreach(String tag in tags) {
 				if(!tagDict.ContainsKey(tag)) {
-					tagDict[tag] = new Tag(tag, 1, note);
+					tagDict[tag] = new Tag(tag, note);
 				} else {
 					//implies that tag has already been created
-					tagDict[tag].Count++;
 					tagDict[tag].Notes.Add(note);
 				}
-				AddTagToStore(tagDict[tag]);
+				AddTagToStore(tagDict[tag], tagStore);
 			}
 		}
 
@@ -169,8 +193,8 @@ namespace NOTE
 				if(tag.Count == 1) {
 					DeleteTag(tag);
 				} else {
-					TagStore.SetValue(tag.TreeIter, (int)TagCols.Count, --tag.Count);
 					tag.Notes.Remove (note);
+					TagStore.SetValue(tag.TreeIter, (int)TagCols.Count, tag.Count);
 				}
 			}
 		}
@@ -178,7 +202,7 @@ namespace NOTE
 		public void Remove(Note note) {
 			notes.Remove(note);
 			Gtk.TreeIter treeIter = note.TreeIter;
-			ListStore.Remove(ref treeIter);
+			NotesStore.Remove(ref treeIter);
 			RemoveTagsFrom(note);
 
 			//TODO buffering or something?
@@ -187,51 +211,96 @@ namespace NOTE
 		
 		private void AddNoteToStore (Note note)
 		{
+			AddNoteToStore(note,NotesStore);
+		}
+
+		private void AddNoteToStore (Note note, Gtk.ListStore notesStore)
+		{
 			if (note.TreeIter.Equals (Gtk.TreeIter.Zero)) {
-				note.TreeIter = ListStore.AppendValues (note.Title, note);
+				note.TreeIter = notesStore.AppendValues (note.Title, note);
 				Debug.Assert(!note.TreeIter.Equals(Gtk.TreeIter.Zero));
 			} else {
-				ListStore.SetValue(note.TreeIter, (int)NoteCols.Title, note.Title);
+				notesStore.SetValue(note.TreeIter, (int)NoteCols.Title, note.Title);
 			}
 		}
 
 		private void AddTagToStore(Tag tag) {
+			AddTagToStore(tag, TagStore);
+		}
+
+		private void AddTagToStore(Tag tag, Gtk.ListStore tagStore) {
 			if(tag.TreeIter.Equals (Gtk.TreeIter.Zero)) {
-				tag.TreeIter = TagStore.AppendValues(tag.Name, tag.Count);
+				tag.TreeIter = tagStore.AppendValues(tag.Name, tag.Count);
 				Debug.Assert(!tag.TreeIter.Equals(Gtk.TreeIter.Zero));
 			} else {
-				TagStore.SetValue(tag.TreeIter, (int)TagCols.Count, tag.Count);
+				tagStore.SetValue(tag.TreeIter, (int)TagCols.Count, tag.Count);
 			}
 		}
 		#endregion
 
 		#region GtkStores
-		private Gtk.ListStore MakeTagStore() {
-			if(TagStore == null)
-				TagStore = new Gtk.ListStore(typeof(string), typeof(int));
-			foreach(Tag tag in tagDict.Values) {
-				AddTagToStore(tag);
+		public void MakeSearchStore(String term,
+		                            out Gtk.ListStore notesStore, out Gtk.ListStore tagStore) {
+			Gtk.ListStore notesStoreOut, tagStoreOut;
+			MakeSearchStore(term, this.notes, out notesStoreOut, out tagStoreOut);
+			notesStore = notesStoreOut;
+			tagStore = tagStoreOut;
+		}
+
+		//For search, we have to make separate list and tag stores corresponding to found notes
+		//Function goes through Notes List, find notes, add them to search tag dict
+		//Then make a GtkListStore.
+		//TODO what if a tag is already selected?
+		public void MakeSearchStore(String term, IEnumerable<Note> notes,
+		                            out Gtk.ListStore notesStore, out Gtk.ListStore tagStore) {
+			notesStore = MakeNotesStore(SearchNotes(term, notes)); //after this, the searchTagDict should be done
+			searchTagDict = new Dictionary<String,Tag>();
+			tagStore = MakeTagStore(searchTagDict);
+		}
+
+		/// <summary>
+		/// Goes through notes collection -- if note contains search term
+		/// Then we add it to the searchTagDict.
+		/// </summary>
+		/// <returns> Notes that were gone through </returns>
+		private IEnumerable<Note> SearchNotes(String term, IEnumerable<Note> notes) {
+			foreach(Note note in notes) {
+				if(note.Contains(term)) {
+					AddTagsFrom(note, note.Tags, searchTagDict);
+					yield return note;
+				}
 			}
-			return TagStore;
 		}
 
-		public Gtk.ListStore MakeListStore (string tag)
+		private Gtk.ListStore MakeTagStore() {
+			return MakeTagStore(TagDict);
+		}
+
+		private Gtk.ListStore MakeTagStore(IDictionary<String,Tag> tagDict) {
+			Gtk.ListStore tagStore = new Gtk.ListStore(typeof(string), typeof(int));
+			foreach(Tag tag in tagDict.Values) {
+				AddTagToStore(tag, tagStore);
+			}
+			return tagStore;
+		}
+
+		public Gtk.ListStore MakeNotesStore (string tag)
 		{
-			return MakeListStore(tagDict[tag].Notes);
+			return MakeNotesStore(TagDict[tag].Notes);
 		}
 
-		private Gtk.ListStore MakeListStore ()
+		private Gtk.ListStore MakeNotesStore ()
 		{
-			return MakeListStore(this.notes);
+			return MakeNotesStore(this.notes);
 		}
 
-		private Gtk.ListStore MakeListStore(IEnumerable<Note> notes) {
-			ListStore = new Gtk.ListStore(typeof(string), typeof(Note));
+		private Gtk.ListStore MakeNotesStore(IEnumerable<Note> notes) {
+			Gtk.ListStore notesStore = new Gtk.ListStore(typeof(string), typeof(Note));
 			foreach(Note n in notes) {
 				n.TreeIter = Gtk.TreeIter.Zero;
-				AddNoteToStore(n);
+				AddNoteToStore(n, notesStore);
 			}
-			return ListStore;
+			return notesStore;
 		}
 		#endregion
 	}

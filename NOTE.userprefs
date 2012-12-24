@@ -1,17 +1,22 @@
 ﻿<Properties GitUserInfo="UsingMD">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="NOTE\MainWindow.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="NOTE\Note.cs">
     <Files>
-      <File FileName="NOTE\MainWindow.cs" Line="85" Column="3" />
-      <File FileName="NOTE\Main.cs" Line="1" Column="1" />
-      <File FileName="NOTE\NoteEditor.cs" Line="1" Column="1" />
-      <File FileName="NOTE\NotesModel.cs" Line="178" Column="5" />
+      <File FileName="NOTE\MainWindow.cs" Line="171" Column="84" />
+      <File FileName="NOTE\Main.cs" Line="15" Column="13" />
+      <File FileName="NOTE\NotesModel.cs" Line="201" Column="22" />
+      <File FileName="NOTE\Tag.cs" Line="11" Column="11" />
+      <File FileName="NOTE\Note.cs" Line="2" Column="1" />
+      <File FileName="NOTE\INote.cs" Line="10" Column="31" />
+      <File FileName="NOTE\INoteExtensions.cs" Line="23" Column="119" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
-        <State expanded="True" selected="True">
+        <State expanded="True">
           <Node name="NOTE" expanded="True">
+            <Node name="References" expanded="True" />
             <Node name="Tests" expanded="True" />
+            <Node name="Note.cs" selected="True" />
           </Node>
         </State>
       </Pad>
@@ -23,7 +28,12 @@
         </State>
       </Pad>
       <Pad Id="MonoDevelop.Debugger.WatchPad">
-        <State />
+        <State>
+          <Value>tag</Value>
+          <Value>this.FocusChain</Value>
+          <Value>this.Children</Value>
+          <Value>vbox4</Value>
+        </State>
       </Pad>
       <Pad Id="MonoDevelop.NUnit.TestPad">
         <State expanded="True" selected="True" />

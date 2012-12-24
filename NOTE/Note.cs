@@ -31,7 +31,7 @@ namespace NOTE
 		}
 
 		public bool Contains (String term) {
-			if (Title.Contains(term) && Content.Contains(term))
+			if (Title.Contains(term) || Content.Contains(term))
 				return true;
 			return false;
 		}

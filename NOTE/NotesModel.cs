@@ -253,9 +253,10 @@ namespace NOTE
 		//TODO what if a tag is already selected?
 		public void MakeSearchStore(String term, IEnumerable<Note> notes,
 		                            out Gtk.ListStore notesStore, out Gtk.ListStore tagStore) {
-			notesStore = MakeNotesStore(SearchNotes(term, notes)); //after this, the searchTagDict should be done
 			searchTagDict = new Dictionary<String,Tag>();
-			tagStore = MakeTagStore(searchTagDict);
+			tagStore = new Gtk.ListStore(typeof(string), typeof(int));
+			notesStore = MakeNotesStore(SearchNotes(term, notes, tagStore)); //after this, the searchTagDict should be done
+			//tagStore = MakeTagStore(searchTagDict);
 		}
 
 		/// <summary>
@@ -263,10 +264,10 @@ namespace NOTE
 		/// Then we add it to the searchTagDict.
 		/// </summary>
 		/// <returns> Notes that were gone through </returns>
-		private IEnumerable<Note> SearchNotes(String term, IEnumerable<Note> notes) {
+		private IEnumerable<Note> SearchNotes(String term, IEnumerable<Note> notes, Gtk.ListStore tagStore) {
 			foreach(Note note in notes) {
 				if(note.Contains(term)) {
-					AddTagsFrom(note, note.Tags, searchTagDict);
+					AddTagsFrom(note, note.Tags, searchTagDict, tagStore);
 					yield return note;
 				}
 			}
